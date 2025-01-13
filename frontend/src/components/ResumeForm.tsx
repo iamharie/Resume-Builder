@@ -48,7 +48,7 @@ const ResumeForm = () => {
           tailored resume in the format of both .pdf and docx
         </p>
         <p className="text-sm font-bold text-green-800 mb-6 text-center">
-          Present: Ensure you receive an email after submitting the details!
+          Present: Ensure you receive an email after submitting the details.
         </p>
         <p className="text-sm font-bold text-red-800 mb-6 text-center">
           Blocker: OpenAI API Key subscription
