@@ -5,6 +5,7 @@ import * as Yup from "yup";
 
 const ResumeForm = () => {
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -20,6 +21,7 @@ const ResumeForm = () => {
       jobDescription: Yup.string().required("Job description is required"),
     }),
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         await axios.post(
           "https://resume-builder-yylu.onrender.com/api/tailor-resume",
@@ -28,6 +30,8 @@ const ResumeForm = () => {
         setSuccess(true);
       } catch (error) {
         console.error("Error tailoring resume:", error);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -65,6 +69,8 @@ const ResumeForm = () => {
             onChange={formik.handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {formik.errors.name ? <div>{formik.errors.name}</div> : null}
+
           <input
             type="email"
             name="email"
@@ -74,6 +80,7 @@ const ResumeForm = () => {
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {formik.errors.email ? <div>{formik.errors.email}</div> : null}
           <textarea
             name="resumeText"
             placeholder="Title"
@@ -81,6 +88,9 @@ const ResumeForm = () => {
             onChange={formik.handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {formik.errors.resumeText ? (
+            <div>{formik.errors.resumeText}</div>
+          ) : null}
           <textarea
             name="jobDescription"
             placeholder="Content"
@@ -88,11 +98,21 @@ const ResumeForm = () => {
             onChange={formik.handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          {formik.errors.jobDescription ? (
+            <div>{formik.errors.jobDescription}</div>
+          ) : null}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+            disabled={loading}
           >
-            Submit
+            {loading ? (
+              <div>
+                <span className="spinner" /> Submitting...
+              </div>
+            ) : (
+              "Submit"
+            )}
           </button>
         </form>
       </div>
