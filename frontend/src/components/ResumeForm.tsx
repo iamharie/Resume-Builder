@@ -3,12 +3,12 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-interface User {
-  name: string;
-  email: string;
-  resumeText: string;
-  jobDescription: string;
-}
+// interface User {
+//   name: string;
+//   email: string;
+//   resumeText: string;
+//   jobDescription: string;
+// }
 
 const ResumeForm = () => {
   const [success, setSuccess] = useState(false);
