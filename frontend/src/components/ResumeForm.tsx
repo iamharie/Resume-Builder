@@ -21,7 +21,10 @@ const ResumeForm = () => {
     }),
     onSubmit: async (values) => {
       try {
-        await axios.post("http://localhost:3000/api/tailor-resume", values);
+        await axios.post(
+          "https://resume-builder-yylu.onrender.com/api/tailor-resume",
+          values
+        );
         setSuccess(true);
       } catch (error) {
         console.error("Error tailoring resume:", error);
