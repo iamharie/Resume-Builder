@@ -3,9 +3,17 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+interface User {
+  name: string;
+  email: string;
+  resumeText: string;
+  jobDescription: string;
+}
+
 const ResumeForm = () => {
   const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>("");
 
   const formik = useFormik({
     initialValues: {
@@ -28,7 +36,8 @@ const ResumeForm = () => {
           values
         );
         setSuccess(true);
-      } catch (error) {
+      } catch (error: any) {
+        setError(error.message || "Something went wrong");
         console.error("Error tailoring resume:", error);
       } finally {
         setLoading(false);
@@ -54,6 +63,12 @@ const ResumeForm = () => {
           Blocker: OpenAI API Key subscription
         </p>
 
+        {error != "" && (
+          <p className="text-black bg-red-100 p-3 rounded-lg text-center mb-4">
+            Something went wrong. {error}
+          </p>
+        )}
+
         {success && (
           <p className="text-green-600 bg-green-100 p-3 rounded-lg text-center mb-4">
             Check your email.
@@ -69,7 +84,6 @@ const ResumeForm = () => {
             onChange={formik.handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {formik.errors.name ? <div>{formik.errors.name}</div> : null}
 
           <input
             type="email"
@@ -80,7 +94,7 @@ const ResumeForm = () => {
             required
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+
           <textarea
             name="resumeText"
             placeholder="Title"
@@ -88,9 +102,7 @@ const ResumeForm = () => {
             onChange={formik.handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {formik.errors.resumeText ? (
-            <div>{formik.errors.resumeText}</div>
-          ) : null}
+
           <textarea
             name="jobDescription"
             placeholder="Content"
@@ -98,9 +110,7 @@ const ResumeForm = () => {
             onChange={formik.handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          {formik.errors.jobDescription ? (
-            <div>{formik.errors.jobDescription}</div>
-          ) : null}
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
